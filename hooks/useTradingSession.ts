@@ -6,7 +6,6 @@ import useTokenApprovals from "@/hooks/useTokenApprovals";
 import useSafeDeployment from "@/hooks/useSafeDeployment";
 import useRelayClient from "@/hooks/useRelayClient";
 
-import { RelayClient } from "@polymarket/builder-relayer-client";
 import {
   loadSession,
   saveSession,
@@ -30,7 +29,7 @@ export default function useTradingSession() {
   const { data: walletClient } = useWalletClient();
   const { address: eoaAddress } = useConnection();
   const { createOrDeriveUserApiCredentials } = useUserApiCredentials();
-  const { checkUsdcApproval, setUsdcTokenApprovals } = useTokenApprovals();
+  const { checkAllTokenApprovals, setAllTokenApprovals } = useTokenApprovals();
   const { derivedSafeAddressFromEoa, isSafeDeployed, deploySafe } =
     useSafeDeployment(eoaAddress);
   const { relayClient, initializeRelayClient, clearRelayClient } =
@@ -121,17 +120,17 @@ export default function useTradingSession() {
         apiCreds = await createOrDeriveUserApiCredentials();
       }
 
-      // Step 6: Set USDC token approvals for the CTF Exchange
+      // Step 6: Set all required token approvals for trading
       setCurrentStep("approvals");
-      const hasApprovalsOnchain = await checkUsdcApproval(
+      const approvalStatus = await checkAllTokenApprovals(
         derivedSafeAddressFromEoa
       );
 
       let hasApprovals = false;
-      if (hasApprovalsOnchain) {
+      if (approvalStatus.allApproved) {
         hasApprovals = true;
       } else {
-        hasApprovals = await setUsdcTokenApprovals(relayClient as RelayClient);
+        hasApprovals = await setAllTokenApprovals(initializedRelayClient);
       }
 
       // Step 7: Create custom session object
@@ -162,8 +161,6 @@ export default function useTradingSession() {
     isSafeDeployed,
     deploySafe,
     createOrDeriveUserApiCredentials,
-    checkUsdcApproval,
-    setUsdcTokenApprovals,
   ]);
 
   // This function clears the trading session and resets the state

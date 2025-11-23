@@ -15,7 +15,7 @@ export default function SessionProgress({
           {currentStep === "checking" && "Checking Safe deployment..."}
           {currentStep === "deploying" && "Deploying Safe wallet..."}
           {currentStep === "credentials" && "Getting User's API credentials..."}
-          {currentStep === "approvals" && "Setting USDC token approvals..."}
+          {currentStep === "approvals" && "Setting all token approvals..."}
         </p>
       </div>
     </div>

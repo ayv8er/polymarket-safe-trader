@@ -15,7 +15,7 @@ export default function SessionInfo({
       <ul className="text-xs leading-relaxed text-gray-400 space-y-1 ml-4 list-disc">
         <li>Sign to deploy Safe wallet (if not already deployed)</li>
         <li>Sign to create user's API credentials for the CLOB client</li>
-        <li>Sign to approve USDC approvals for the CTF Exchange</li>
+        <li>Sign to approve all token approvals for trading</li>
       </ul>
     </div>
   );

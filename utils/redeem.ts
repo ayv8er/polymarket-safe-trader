@@ -3,7 +3,10 @@ import {
   SafeTransaction,
 } from "@polymarket/builder-relayer-client";
 import { Interface } from "ethers/lib/utils";
-import { USDC_ADDRESS, CTF_CONTRACT_ADDRESS } from "@/constants/tokens";
+import {
+  USDC_E_CONTRACT_ADDRESS,
+  CTF_CONTRACT_ADDRESS,
+} from "@/constants/tokens";
 
 const ctfInterface = new Interface([
   "function redeemPositions(address collateralToken, bytes32 parentCollectionId, bytes32 conditionId, uint[] indexSets)",
@@ -25,7 +28,7 @@ export const createRedeemTx = (params: RedeemParams): SafeTransaction => {
   const indexSets = [indexSet];
 
   const data = ctfInterface.encodeFunctionData("redeemPositions", [
-    USDC_ADDRESS,
+    USDC_E_CONTRACT_ADDRESS,
     parentCollectionId,
     conditionId,
     indexSets,

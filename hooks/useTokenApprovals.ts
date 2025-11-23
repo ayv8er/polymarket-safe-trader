@@ -1,35 +1,32 @@
 import { useCallback } from "react";
 import { RelayClient } from "@polymarket/builder-relayer-client";
-import { createUSDCApprovalTx, checkUSDCApproval } from "@/utils/approvals";
+import { checkAllApprovals, createAllApprovalTxs } from "@/utils/approvals";
 
-// Uses relayClient to set USDC token approvals for the CTF Exchange
+// Uses relayClient to set all required token approvals for trading
 
 export default function useTokenApprovals() {
-  const checkUsdcApproval = useCallback(
-    async (safeAddress: string): Promise<boolean> => {
-      try {
-        return await checkUSDCApproval(safeAddress);
-      } catch (err) {
-        const error =
-          err instanceof Error ? err : new Error("Failed to check approvals");
-        throw error;
-      }
-    },
-    []
-  );
+  const checkAllTokenApprovals = useCallback(async (safeAddress: string) => {
+    try {
+      return await checkAllApprovals(safeAddress);
+    } catch (err) {
+      const error =
+        err instanceof Error ? err : new Error("Failed to check approvals");
+      throw error;
+    }
+  }, []);
 
-  const setUsdcTokenApprovals = useCallback(
+  const setAllTokenApprovals = useCallback(
     async (relayClient: RelayClient): Promise<boolean> => {
       try {
-        const approvalTx = createUSDCApprovalTx();
+        const approvalTxs = createAllApprovalTxs();
         const response = await relayClient.execute(
-          [approvalTx],
-          "USDC approval on CTF Exchange"
+          approvalTxs,
+          "Set all token approvals for trading"
         );
         await response.wait();
         return true;
       } catch (err) {
-        console.error("Failed to set USDC token approvals:", err);
+        console.error("Failed to set all token approvals:", err);
         return false;
       }
     },
@@ -37,7 +34,7 @@ export default function useTokenApprovals() {
   );
 
   return {
-    checkUsdcApproval,
-    setUsdcTokenApprovals,
+    checkAllTokenApprovals,
+    setAllTokenApprovals,
   };
 }
