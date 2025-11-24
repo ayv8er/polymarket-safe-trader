@@ -14,7 +14,7 @@ export default function SessionSuccess({
           <li>
             User's API credentials created / derived, and stored in session
           </li>
-          <li>USDC token approvals set for the CTF Exchange</li>
+          <li>All token approvals set for trading</li>
         </ul>
       </div>
     </div>
